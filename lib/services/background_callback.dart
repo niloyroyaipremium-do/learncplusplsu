@@ -1,5 +1,9 @@
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'notification_service.dart';
+import '../utils/logger.dart';
 
 /// Background callback dispatcher for Workmanager
 /// This file handles background tasks for the CodeLingo app
@@ -8,6 +12,14 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
       switch (task) {
+        case 'learnCppBackgroundTask':
+          return await _handleMainBackgroundTask();
+        case 'dailyReminderTask':
+          return await _handleDailyReminderTask();
+        case 'streakCheckTask':
+          return await _handleStreakCheckTask();
+        case 'progressSyncTask':
+          return await _handleProgressSyncTask();
         case 'background_lesson_sync':
           await _handleLessonSync(inputData);
           break;
