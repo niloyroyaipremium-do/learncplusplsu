@@ -134,7 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 ? Theme.of(context).primaryColor
                                 : Theme.of(
                                     context,
-                                  ).primaryColor.withValues(alpha: 0.3),
+                                  ).primaryColor.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -194,7 +194,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: page.color.withValues(alpha: 0.1),
+                  color: page.color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(60),
                 ),
                 child: Icon(page.icon, size: 60, color: page.color),
@@ -220,7 +220,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
+                  ).textTheme.bodyLarge?.color?.withOpacity(0.7),
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,

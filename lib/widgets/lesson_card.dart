@@ -29,7 +29,7 @@ class LessonCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: _getDifficultyColor(
                         lesson.difficulty,
-                      ).withValues(alpha: 0.2),
+                      ).withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(

@@ -93,7 +93,7 @@ class _SyntaxHighlightedEditorState extends State<SyntaxHighlightedEditor> {
         decoration: InputDecoration(
           hintText: 'Enter your C++ code here...',
           hintStyle: TextStyle(
-            color: _getTextColor().withValues(alpha: 0.6),
+            color: _getTextColor().withOpacity(0.6),
             fontFamily: 'Consolas',
             fontSize: widget.fontSize,
           ),

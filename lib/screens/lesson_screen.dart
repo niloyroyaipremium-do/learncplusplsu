@@ -77,7 +77,7 @@ class _LessonScreenState extends State<LessonScreen> {
               color: Theme.of(context).scaffoldBackgroundColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: Colors.black.withOpacity(0.1),
                   blurRadius: 4,
                   offset: const Offset(0, -2),
                 ),
@@ -139,7 +139,7 @@ class _LessonScreenState extends State<LessonScreen> {
               gradient: LinearGradient(
                 colors: [
                   Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                  Theme.of(context).primaryColor.withOpacity(0.8),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -157,7 +157,7 @@ class _LessonScreenState extends State<LessonScreen> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -172,14 +172,14 @@ class _LessonScreenState extends State<LessonScreen> {
                     const SizedBox(width: 8),
                     Icon(
                       Icons.access_time,
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: Colors.white.withOpacity(0.8),
                       size: 16,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       lesson.duration,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: Colors.white.withOpacity(0.8),
                         fontSize: 14,
                       ),
                     ),
@@ -197,7 +197,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 Text(
                   lesson.description,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: Colors.white.withOpacity(0.9),
                   ),
                 ),
               ],
@@ -214,7 +214,7 @@ class _LessonScreenState extends State<LessonScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -254,7 +254,7 @@ class _LessonScreenState extends State<LessonScreen> {
             color: Theme.of(context).cardColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),

@@ -373,10 +373,10 @@ int main() {
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.1),
+                      color: Colors.green.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: Colors.green.withValues(alpha: 0.3),
+                        color: Colors.green.withOpacity(0.3),
                       ),
                     ),
                     child: Row(
@@ -514,7 +514,7 @@ int main() {
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF667eea).withValues(alpha: 0.4),
+                  color: Color(0xFF667eea).withOpacity(0.4),
                   blurRadius: 15,
                   offset: Offset(0, 8),
                 ),
@@ -561,12 +561,12 @@ int main() {
         gradient: LinearGradient(
           colors: _lastResult!.success
               ? [
-                  Color(0xFF4CAF50).withValues(alpha: 0.1),
-                  Color(0xFF8BC34A).withValues(alpha: 0.1),
+                  Color(0xFF4CAF50).withOpacity(0.1),
+                  Color(0xFF8BC34A).withOpacity(0.1),
                 ]
               : [
-                  Color(0xFFF44336).withValues(alpha: 0.1),
-                  Color(0xFFE57373).withValues(alpha: 0.1),
+                  Color(0xFFF44336).withOpacity(0.1),
+                  Color(0xFFE57373).withOpacity(0.1),
                 ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -580,7 +580,7 @@ int main() {
           BoxShadow(
             color:
                 (_lastResult!.success ? Color(0xFF4CAF50) : Color(0xFFF44336))
-                    .withValues(alpha: 0.2),
+                    .withOpacity(0.2),
             blurRadius: 8,
             offset: Offset(0, 4),
           ),
@@ -621,7 +621,7 @@ int main() {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -671,15 +671,15 @@ int main() {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFF667eea).withValues(alpha: 0.1),
-            Color(0xFF764ba2).withValues(alpha: 0.1),
+            Color(0xFF667eea).withOpacity(0.1),
+            Color(0xFF764ba2).withOpacity(0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Color(0xFF667eea).withValues(alpha: 0.3),
+          color: Color(0xFF667eea).withOpacity(0.3),
           width: 2,
         ),
       ),
@@ -690,7 +690,7 @@ int main() {
             builder: (context, child) {
               return LinearProgressIndicator(
                 value: _loadingAnimation.value,
-                backgroundColor: Color(0xFF667eea).withValues(alpha: 0.2),
+                backgroundColor: Color(0xFF667eea).withOpacity(0.2),
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
                 minHeight: 6,
               );
@@ -825,7 +825,7 @@ int main() {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: Colors.black.withOpacity(0.1),
                     blurRadius: 8,
                     offset: Offset(0, 4),
                   ),
@@ -917,9 +917,9 @@ int main() {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: IconButton(
         onPressed: onPressed,
