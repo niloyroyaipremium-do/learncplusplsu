@@ -134,7 +134,7 @@ class _OptimizedCodeEditorState extends State<OptimizedCodeEditor>
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3), width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
@@ -150,7 +150,7 @@ class _OptimizedCodeEditorState extends State<OptimizedCodeEditor>
             ),
             lineNumberStyle: LineNumberStyle(
               textStyle: TextStyle(
-                color: Colors.grey.withOpacity(0.7),
+                color: Colors.grey.withValues(alpha: 0.7),
                 fontSize: 12,
               ),
               width: 60,
@@ -245,7 +245,7 @@ class _OptimizedCodeExecutorState extends State<OptimizedCodeExecutor> {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
