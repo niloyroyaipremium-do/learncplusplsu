@@ -103,7 +103,7 @@ class _TutorialCardState extends State<TutorialCard>
                             Expanded(
                               child: Text(
                                 widget.title,
-                                style: TutorialTheme.sectionTitle.copyWith(
+                                style: TutorialTheme.cardTitle.copyWith(
                                   color: widget.isDarkMode 
                                       ? TutorialTheme.darkTutorialPrimary 
                                       : TutorialTheme.tutorialPrimary,
@@ -115,7 +115,7 @@ class _TutorialCardState extends State<TutorialCard>
                         const SizedBox(height: 12),
                         Text(
                           widget.content,
-                          style: TutorialTheme.contentText.copyWith(
+                          style: TutorialTheme.cardContent.copyWith(
                             color: widget.isDarkMode ? Colors.white : Colors.black87,
                           ),
                         ),
@@ -226,7 +226,7 @@ class _TutorialCodeBlockState extends State<TutorialCodeBlock>
                         Expanded(
                           child: Text(
                             widget.title,
-                            style: TutorialTheme.sectionSubtitle.copyWith(
+                            style: TutorialTheme.navigationTitle.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -505,13 +505,12 @@ class TutorialProgressIndicator extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          Text(
-            '$currentStep / $totalSteps',
-            style: GoogleFonts.inter(
-              fontWeight: FontWeight.bold,
-              color: isDarkMode ? Colors.white : Colors.black87,
-            ),
-          ),
+                      Text(
+                        '$currentStep / $totalSteps',
+                        style: TutorialTheme.progressText.copyWith(
+                          color: isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                      ),
         ],
       ),
     );
@@ -547,6 +546,15 @@ class TutorialButton extends StatelessWidget {
       case TutorialButtonType.accent:
         style = TutorialTheme.accentButtonStyle;
         break;
+      case TutorialButtonType.success:
+        style = TutorialTheme.successButtonStyle;
+        break;
+      case TutorialButtonType.warning:
+        style = TutorialTheme.warningButtonStyle;
+        break;
+      case TutorialButtonType.info:
+        style = TutorialTheme.infoButtonStyle;
+        break;
     }
 
     return ElevatedButton.icon(
@@ -567,7 +575,7 @@ class TutorialButton extends StatelessWidget {
   }
 }
 
-enum TutorialButtonType { primary, secondary, accent }
+enum TutorialButtonType { primary, secondary, accent, success, warning, info }
 
 class TutorialTabBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController controller;
@@ -632,4 +640,267 @@ class TutorialTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(48);
+}
+
+// New enhanced widgets for better tutorial experience
+
+class TutorialAchievementBadge extends StatelessWidget {
+  final String title;
+  final String description;
+  final IconData icon;
+  final bool isUnlocked;
+
+  const TutorialAchievementBadge({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.icon,
+    this.isUnlocked = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: TutorialTheme.achievementBadgeDecoration,
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 24,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TutorialTheme.cardTitle.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TutorialTheme.cardContent.copyWith(
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isUnlocked)
+            const Icon(
+              Icons.check_circle,
+              color: Colors.white,
+              size: 20,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class TutorialFloatingCard extends StatelessWidget {
+  final String title;
+  final String content;
+  final IconData? icon;
+  final Color? iconColor;
+  final bool isDarkMode;
+  final VoidCallback? onTap;
+
+  const TutorialFloatingCard({
+    super.key,
+    required this.title,
+    required this.content,
+    this.icon,
+    this.iconColor,
+    this.isDarkMode = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: isDarkMode 
+          ? TutorialTheme.darkFloatingCardDecoration 
+          : TutorialTheme.floatingCardDecoration,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    if (icon != null) ...[
+                      Icon(
+                        icon,
+                        color: iconColor ?? (isDarkMode 
+                            ? TutorialTheme.darkTutorialPrimary 
+                            : TutorialTheme.tutorialPrimary),
+                        size: 28,
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: TutorialTheme.cardTitle.copyWith(
+                          color: isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  content,
+                  style: TutorialTheme.cardContent.copyWith(
+                    color: isDarkMode ? Colors.white70 : Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TutorialProgressBar extends StatelessWidget {
+  final double progress;
+  final bool isDarkMode;
+  final String? label;
+
+  const TutorialProgressBar({
+    super.key,
+    required this.progress,
+    this.isDarkMode = false,
+    this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label != null) ...[
+          Text(
+            label!,
+            style: TutorialTheme.progressText.copyWith(
+              color: isDarkMode ? Colors.white : Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+        Container(
+          height: 8,
+          decoration: isDarkMode 
+              ? TutorialTheme.darkProgressBarDecoration 
+              : TutorialTheme.progressBarDecoration,
+          child: FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: progress.clamp(0.0, 1.0),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: isDarkMode 
+                    ? TutorialTheme.darkGradient 
+                    : TutorialTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TutorialSectionHeader extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData? icon;
+  final bool isDarkMode;
+  final Color? accentColor;
+
+  const TutorialSectionHeader({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    this.icon,
+    this.isDarkMode = false,
+    this.accentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = accentColor ?? (isDarkMode 
+        ? TutorialTheme.darkTutorialPrimary 
+        : TutorialTheme.tutorialPrimary);
+    
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.1), color.withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: color.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          if (icon != null) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TutorialTheme.sectionTitle.copyWith(
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TutorialTheme.sectionSubtitle.copyWith(
+                    color: isDarkMode ? Colors.white70 : Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
