@@ -155,12 +155,12 @@ class _OptimizedLessonCardState extends State<OptimizedLessonCard>
   List<BoxShadow> _getBoxShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 8,
         offset: const Offset(0, 4),
       ),
       BoxShadow(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         blurRadius: 16,
         offset: const Offset(0, 8),
       ),
@@ -205,7 +205,7 @@ class _OptimizedLessonCardState extends State<OptimizedLessonCard>
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(_getLessonIcon(), color: Colors.white, size: 24),
@@ -237,7 +237,7 @@ class _OptimizedLessonCardState extends State<OptimizedLessonCard>
   Widget _buildDescription() {
     return Text(
       widget.lesson.description,
-      style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+      style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
@@ -254,7 +254,7 @@ class _OptimizedLessonCardState extends State<OptimizedLessonCard>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
@@ -271,7 +271,7 @@ class _OptimizedLessonCardState extends State<OptimizedLessonCard>
   Widget _buildDuration() {
     return Text(
       '${widget.lesson.estimatedTime} min',
-      style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
+      style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12),
     );
   }
 
@@ -279,7 +279,7 @@ class _OptimizedLessonCardState extends State<OptimizedLessonCard>
     if (widget.isLocked) {
       return Container(
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(16),
         ),
         child: const Center(
