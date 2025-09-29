@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import '../utils/logger.dart';
 import 'notification_service.dart';
+import 'background_callback.dart';
 
 /// Background Service for Learn C++ App
 ///
@@ -136,32 +137,6 @@ class BackgroundService {
   bool get isRunning => _isInitialized;
 }
 
-/// Background task callback dispatcher
-@pragma('vm:entry-point')
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    Logger.info('Background task executed: $task');
-
-    try {
-      switch (task) {
-        case 'learnCppBackgroundTask':
-          return await _handleMainBackgroundTask();
-        case 'dailyReminderTask':
-          return await _handleDailyReminderTask();
-        case 'streakCheckTask':
-          return await _handleStreakCheckTask();
-        case 'progressSyncTask':
-          return await _handleProgressSyncTask();
-        default:
-          Logger.warning('Unknown background task: $task');
-          return Future.value(true);
-      }
-    } catch (e) {
-      Logger.error('Error in background task $task', e);
-      return Future.value(false);
-    }
-  });
-}
 
 /// Handle main background task
 Future<bool> _handleMainBackgroundTask() async {
