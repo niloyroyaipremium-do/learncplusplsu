@@ -50,8 +50,8 @@ class TutorialNavigationScreen extends StatefulWidget {
 }
 
 class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
-  final bool _isDarkMode = true; // Default to dark mode to match reference
-  final String _selectedSection = 'C++ HOME';
+  bool _isDarkMode = true; // Default to dark mode to match reference
+  String _selectedSection = 'C++ HOME';
   // Removed unused fields to fix warnings
   final String _executionResult = '';
 
@@ -64,14 +64,6 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
   void _initializeSections() {
     // Initialize sections - removed unused expansion tracking
     // This method is kept for future use but currently not needed
-        'Conditional Logic',
-      ],
-      'C++ If...Else': ['if Statement', 'else Statement', 'else if Statement'],
-      'C++ While Loop': ['while Loop', 'do-while Loop', 'Loop Control'],
-      'C++ For Loop': ['for Loop', 'Range-based for', 'Nested Loops'],
-      'C++ Arrays': ['Array Declaration', 'Array Access', 'Array Methods'],
-      'C++ Structures': ['Struct Definition', 'Struct Members', 'Struct Usage'],
-    };
   }
 
   String? _getLessonIdForTutorial(String tutorialTitle) {
@@ -238,8 +230,26 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
-              // Icon logic...
-              // Title Text...
+              Icon(
+                isHome ? Icons.home : Icons.code,
+                color: isActive
+                    ? (_isDarkMode ? Colors.white : const Color(0xFF1A73E8))
+                    : (_isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                    color: isActive
+                        ? (_isDarkMode ? Colors.white : const Color(0xFF1A73E8))
+                        : (_isDarkMode ? Colors.grey[300] : Colors.grey[700]),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -248,8 +258,44 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
   }
 
   Widget _buildExpandableItem(String title) {
-    // ... Implementation remains the same
-    return Container();
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _selectedSection = title;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Icon(
+                Icons.folder_outlined,
+                color: _isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: _isDarkMode ? Colors.grey[300] : Colors.grey[700],
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: _isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                size: 16,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   // Removed unused _buildSubSection method
@@ -366,24 +412,207 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
   }
 
   Widget _buildCodeExample() {
-    // ... Implementation remains the same, but the Run button logic is inside
-    return Container();
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _isDarkMode ? const Color(0xFF2A2A2A) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: _isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: (_isDarkMode ? Colors.black : Colors.grey).withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Code Example',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: _isDarkMode ? Colors.white : Colors.black87,
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  // Execute code logic
+                  setState(() {
+                    // Update execution result
+                  });
+                },
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Run'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1A73E8),
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: _isDarkMode ? const Color(0xFF1A1A1A) : const Color(0xFFF8F8F8),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: _isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
+              ),
+            ),
+            child: Text(
+              _getCodeExample(_selectedSection),
+              style: TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 14,
+                color: _isDarkMode ? Colors.white70 : Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildExecutionResult() {
-    // ... Implementation remains the same
-    return Container();
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _isDarkMode ? const Color(0xFF2A2A2A) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: _isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: (_isDarkMode ? Colors.black : Colors.grey).withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Execution Result',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: _isDarkMode ? Colors.white : Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: _isDarkMode ? const Color(0xFF1A1A1A) : const Color(0xFFF8F8F8),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: _isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
+              ),
+            ),
+            child: Text(
+              _executionResult,
+              style: TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 14,
+                color: _isDarkMode ? Colors.white70 : Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // Removed unused _executeCode method
 
   String _getCodeExample(String section) {
-    // ... Implementation remains the same
-    return '#include <iostream>\nint main() { std::cout << "Hello!"; }';
+    switch (section) {
+      case 'C++ HOME':
+        return '''#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Welcome to C++ Learning!" << endl;
+    return 0;
+}''';
+      case 'C++ Intro':
+        return '''#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}''';
+      case 'C++ Variables':
+        return '''#include <iostream>
+using namespace std;
+
+int main() {
+    int age = 25;
+    string name = "John";
+    cout << "Name: " << name << ", Age: " << age << endl;
+    return 0;
+}''';
+      default:
+        return '''#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Learning $section!" << endl;
+    return 0;
+}''';
+    }
   }
 
   String _getSectionContent(String section) {
-    // ... Implementation remains the same
-    return 'This section covers $section in detail.';
+    switch (section) {
+      case 'C++ HOME':
+        return 'Welcome to the C++ Learning Platform! This is your starting point for mastering C++ programming.';
+      case 'C++ Intro':
+        return 'Learn the basics of C++ programming language, including syntax, data types, and basic operations.';
+      case 'C++ Variables':
+        return 'Understand how to declare and use variables in C++, including different data types and naming conventions.';
+      case 'C++ Data Types':
+        return 'Explore the various data types available in C++ such as int, float, double, char, string, and boolean.';
+      case 'C++ Operators':
+        return 'Learn about arithmetic, relational, logical, and assignment operators in C++.';
+      case 'C++ Strings':
+        return 'Master string manipulation in C++ including concatenation, comparison, and various string methods.';
+      case 'C++ Booleans':
+        return 'Understand boolean data type and logical operations in C++.';
+      case 'C++ If...Else':
+        return 'Learn conditional statements and decision making in C++ programming.';
+      case 'C++ Switch':
+        return 'Master switch-case statements for multiple condition handling.';
+      case 'C++ Break/Continue':
+        return 'Understand loop control statements for breaking and continuing loops.';
+      case 'C++ While Loop':
+        return 'Learn while and do-while loops for repetitive tasks.';
+      case 'C++ For Loop':
+        return 'Master for loops and nested loops for efficient iteration.';
+      case 'C++ Arrays':
+        return 'Understand array declaration, initialization, and manipulation in C++.';
+      case 'C++ Structures':
+        return 'Learn about structures and how to create custom data types.';
+      case 'C++ Math':
+        return 'Explore mathematical functions and operations in C++.';
+      case 'C++ User Input':
+        return 'Learn how to get input from users and handle different data types.';
+      default:
+        return 'This section covers $section in detail. Learn the concepts and practice with code examples.';
+    }
   }
 }

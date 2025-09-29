@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Represents a user profile entity in the domain layer
 class UserProfile {
   /// Unique identifier for the user
