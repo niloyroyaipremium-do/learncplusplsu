@@ -8,6 +8,11 @@ class UserProvider extends ChangeNotifier {
   final UserRepository _userRepository;
 
   UserProvider(this._userRepository) {
+    // Initialize with default values first
+    _userProfile = null;
+    _isLoading = false;
+    _errorMessage = null;
+    // Then load user data asynchronously
     _initializeUser();
   }
 

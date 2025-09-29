@@ -13,6 +13,12 @@ class ProgressProvider extends ChangeNotifier {
   int get quizzesPassed => _quizzesPassed;
 
   ProgressProvider() {
+    // Initialize with default values first
+    _totalPoints = 0;
+    _streak = 0;
+    _lessonsCompleted = 0;
+    _quizzesPassed = 0;
+    // Then load from storage asynchronously
     _loadProgress();
   }
 

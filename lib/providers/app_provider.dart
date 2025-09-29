@@ -60,7 +60,7 @@ class AppProvider extends ChangeNotifier {
   Future<void> initialize() async {
     await _loadUserData();
     _checkStreak();
-    _loadSettings();
+    await _loadSettings();
   }
 
   // Load user data from SharedPreferences

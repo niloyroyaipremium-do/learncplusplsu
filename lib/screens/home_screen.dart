@@ -37,6 +37,11 @@ class HomeScreen extends StatelessWidget {
             onPressed: () => context.go('/test'),
             tooltip: 'Test Screen',
           ),
+          IconButton(
+            icon: const Icon(Icons.verified_user),
+            onPressed: () => context.go('/provider-test'),
+            tooltip: 'Provider Test',
+          ),
         ],
       ),
       body: Consumer3<LessonProvider, ProgressProvider, AppProvider>(
