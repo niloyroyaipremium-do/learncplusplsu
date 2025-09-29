@@ -1,153 +1,123 @@
-/// Custom exceptions for the C++ Learning App
-///
-/// This file defines all custom exceptions used throughout the application
-/// to provide better error handling and user feedback.
-library;
-
-/// Base exception class for all app-specific exceptions
+/// Base class for all application-specific exceptions
 abstract class AppException implements Exception {
   final String message;
   final String? code;
   final dynamic details;
 
-  const AppException({required this.message, this.code, this.details});
+  const AppException({
+    required this.message,
+    this.code,
+    this.details,
+  });
 
   @override
-  String toString() => 'AppException: $message';
+  String toString() => 'AppException: $message${code != null ? ' (Code: $code)' : ''}';
 }
 
-/// Exception thrown when network operations fail
+/// Network-related exceptions
 class NetworkException extends AppException {
   const NetworkException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'NetworkException: $message';
 }
 
-/// Exception thrown when data operations fail
+/// Data-related exceptions
 class DataException extends AppException {
-  const DataException({required super.message, super.code, super.details});
-
-  @override
-  String toString() => 'DataException: $message';
+  const DataException({
+    required super.message,
+    super.code,
+    super.details,
+  });
 }
 
-/// Exception thrown when code execution fails
+/// Code execution exceptions
 class CodeExecutionException extends AppException {
   const CodeExecutionException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'CodeExecutionException: $message';
 }
 
-/// Exception thrown when validation fails
+/// Validation exceptions
 class ValidationException extends AppException {
   const ValidationException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'ValidationException: $message';
 }
 
-/// Exception thrown when authentication fails
+/// Authentication exceptions
 class AuthenticationException extends AppException {
   const AuthenticationException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'AuthenticationException: $message';
 }
 
-/// Exception thrown when file operations fail
+/// File operation exceptions
 class FileException extends AppException {
-  const FileException({required super.message, super.code, super.details});
-
-  @override
-  String toString() => 'FileException: $message';
+  const FileException({
+    required super.message,
+    super.code,
+    super.details,
+  });
 }
 
-/// Exception thrown when storage operations fail
+/// Storage exceptions
 class StorageException extends AppException {
   const StorageException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'StorageException: $message';
 }
 
-/// Exception thrown when lesson operations fail
+/// Lesson-related exceptions
 class LessonException extends AppException {
   const LessonException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'LessonException: $message';
 }
 
-/// Exception thrown when user profile operations fail
+/// User profile exceptions
 class UserProfileException extends AppException {
   const UserProfileException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'UserProfileException: $message';
 }
 
-/// Exception thrown when configuration is invalid
+/// Configuration exceptions
 class ConfigurationException extends AppException {
   const ConfigurationException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'ConfigurationException: $message';
 }
 
-/// Exception thrown when timeout occurs
+/// Timeout exceptions
 class TimeoutException extends AppException {
   const TimeoutException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'TimeoutException: $message';
 }
 
-/// Exception thrown when permission is denied
+/// Permission exceptions
 class PermissionException extends AppException {
   const PermissionException({
     required super.message,
     super.code,
     super.details,
   });
-
-  @override
-  String toString() => 'PermissionException: $message';
 }
