@@ -166,7 +166,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       });
                     },
                     tileColor: isSelected
-                        ? Theme.of(context).primaryColor.withOpacity(0.1)
+                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
                         : null,
                   ),
                 );

@@ -50,8 +50,8 @@ class TutorialNavigationScreen extends StatefulWidget {
 }
 
 class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
-  final bool _isDarkMode = true; // Default to dark mode to match reference
-  final String _selectedSection = 'C++ HOME';
+  bool _isDarkMode = true; // Default to dark mode to match reference
+  String _selectedSection = 'C++ HOME';
   // Removed unused fields to fix warnings
   final String _executionResult = '';
 
@@ -64,14 +64,7 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
   void _initializeSections() {
     // Initialize sections - removed unused expansion tracking
     // This method is kept for future use but currently not needed
-        'Conditional Logic',
-      ],
-      'C++ If...Else': ['if Statement', 'else Statement', 'else if Statement'],
-      'C++ While Loop': ['while Loop', 'do-while Loop', 'Loop Control'],
-      'C++ For Loop': ['for Loop', 'Range-based for', 'Nested Loops'],
-      'C++ Arrays': ['Array Declaration', 'Array Access', 'Array Methods'],
-      'C++ Structures': ['Struct Definition', 'Struct Members', 'Struct Usage'],
-    };
+    // Sections can be expanded here if needed in the future
   }
 
   String? _getLessonIdForTutorial(String tutorialTitle) {
@@ -238,8 +231,28 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
-              // Icon logic...
-              // Title Text...
+              Icon(
+                isHome ? Icons.home : Icons.code,
+                color: isHome
+                    ? Colors.white
+                    : isActive
+                        ? (_isDarkMode ? Colors.white : const Color(0xFF1A73E8))
+                        : (_isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                  color: isHome
+                      ? Colors.white
+                      : isActive
+                          ? (_isDarkMode ? Colors.white : const Color(0xFF1A73E8))
+                          : (_isDarkMode ? Colors.grey[300] : Colors.grey[700]),
+                ),
+              ),
             ],
           ),
         ),
@@ -248,8 +261,41 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
   }
 
   Widget _buildExpandableItem(String title) {
-    // ... Implementation remains the same
-    return Container();
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(0),
+      ),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _selectedSection = title;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Icon(
+                Icons.expand_more,
+                color: _isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: _isDarkMode ? Colors.grey[300] : Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   // Removed unused _buildSubSection method
@@ -272,7 +318,7 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF1A73E8).withOpacity(0.3), // CORRECTED
+                  color: const Color(0xFF1A73E8).withValues(alpha: 0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -334,7 +380,7 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: (_isDarkMode ? Colors.black : Colors.grey).withOpacity(0.1), // CORRECTED
+            color: (_isDarkMode ? Colors.black : Colors.grey).withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -366,24 +412,176 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
   }
 
   Widget _buildCodeExample() {
-    // ... Implementation remains the same, but the Run button logic is inside
-    return Container();
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _isDarkMode ? const Color(0xFF2A2A2A) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: _isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: (_isDarkMode ? Colors.black : Colors.grey).withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Code Example',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: _isDarkMode ? Colors.white : Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: _isDarkMode ? const Color(0xFF1A1A1A) : const Color(0xFFF8F9FA),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: _isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
+              ),
+            ),
+            child: Text(
+              _getCodeExample(_selectedSection),
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'monospace',
+                color: _isDarkMode ? Colors.green[300] : Colors.green[700],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              ElevatedButton.icon(
+                onPressed: () async {
+                  // Execute code logic would go here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Code executed successfully!'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Run Code'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4CAF50),
+                  foregroundColor: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton.icon(
+                onPressed: () {
+                  // Copy code logic would go here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Code copied to clipboard!'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.copy),
+                label: const Text('Copy'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildExecutionResult() {
-    // ... Implementation remains the same
-    return Container();
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _isDarkMode ? const Color(0xFF2A2A2A) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: _isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: (_isDarkMode ? Colors.black : Colors.grey).withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Execution Result',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: _isDarkMode ? Colors.white : Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: _isDarkMode ? const Color(0xFF1A1A1A) : const Color(0xFFF8F9FA),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: _isDarkMode ? Colors.grey[600]! : Colors.grey[300]!,
+              ),
+            ),
+            child: Text(
+              _executionResult,
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'monospace',
+                color: _isDarkMode ? Colors.green[300] : Colors.green[700],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // Removed unused _executeCode method
 
   String _getCodeExample(String section) {
-    // ... Implementation remains the same
-    return '#include <iostream>\nint main() { std::cout << "Hello!"; }';
+    switch (section) {
+      case 'C++ HOME':
+        return '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Welcome to C++ Learning!" << endl;\n    return 0;\n}';
+      case 'C++ Intro':
+        return '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}';
+      case 'C++ Variables':
+        return 'int age = 25;\nstring name = "John";\ndouble height = 5.9;\nbool isStudent = true;';
+      case 'C++ Data Types':
+        return 'int number = 42;\nfloat decimal = 3.14f;\ndouble precise = 3.14159;\nchar letter = \'A\';\nbool flag = true;';
+      default:
+        return '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Learning $section" << endl;\n    return 0;\n}';
+    }
   }
 
   String _getSectionContent(String section) {
-    // ... Implementation remains the same
-    return 'This section covers $section in detail.';
+    switch (section) {
+      case 'C++ HOME':
+        return 'Welcome to the C++ Learning Platform! This is your central hub for mastering C++ programming. Explore different topics, practice coding, and track your progress.';
+      case 'C++ Intro':
+        return 'C++ is a powerful programming language that extends C with object-oriented features. It\'s widely used in system programming, game development, and high-performance applications.';
+      case 'C++ Variables':
+        return 'Variables are containers for storing data values. In C++, you need to declare the type of data a variable will hold before using it.';
+      case 'C++ Data Types':
+        return 'C++ has several built-in data types including integers, floating-point numbers, characters, and booleans. Each type has different memory requirements and value ranges.';
+      default:
+        return 'This section covers $section in detail. Learn the fundamentals and practice with interactive examples.';
+    }
   }
 }
