@@ -313,7 +313,7 @@ class _ModernLinearProgressIndicatorState
                     gradient: LinearGradient(
                       colors: [
                         progressColor,
-                        progressColor.withValues(alpha: 0.8),
+                        progressColor.withOpacity(0.8),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(widget.height / 2),

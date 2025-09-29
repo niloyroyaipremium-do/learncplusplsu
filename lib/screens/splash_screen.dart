@@ -112,8 +112,8 @@ class _SplashScreenState extends State<SplashScreen>
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withValues(alpha: 0.8),
-              Theme.of(context).primaryColor.withValues(alpha: 0.6),
+              Theme.of(context).primaryColor.withOpacity(0.8),
+              Theme.of(context).primaryColor.withOpacity(0.6),
             ],
           ),
         ),
@@ -139,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen>
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
+                              color: Colors.black.withOpacity(0.2),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
@@ -180,7 +180,7 @@ class _SplashScreenState extends State<SplashScreen>
                           'Master Programming Step by Step',
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.9),
+                                color: Colors.white.withOpacity(0.9),
                                 fontSize: 16,
                               ),
                         ),
@@ -204,14 +204,14 @@ class _SplashScreenState extends State<SplashScreen>
                           width: 200,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.3),
+                            color: Colors.white.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(2),
                           ),
                           child: LinearProgressIndicator(
                             value: _progressValue.value,
                             backgroundColor: Colors.transparent,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white.withValues(alpha: 0.8),
+                              Colors.white.withOpacity(0.8),
                             ),
                           ),
                         ),
@@ -220,7 +220,7 @@ class _SplashScreenState extends State<SplashScreen>
                           'Loading...',
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: Colors.white.withOpacity(0.8),
                               ),
                         ),
                       ],

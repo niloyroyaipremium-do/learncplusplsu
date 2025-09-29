@@ -90,8 +90,8 @@ class _LoadingWidgetState extends State<LoadingWidget>
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          color.withValues(alpha: 0.3),
-                          color.withValues(alpha: 0.1),
+                          color.withOpacity(0.3),
+                          color.withOpacity(0.1),
                         ],
                       ),
                     ),
@@ -145,7 +145,7 @@ class _LoadingPainter extends CustomPainter {
       center,
       radius - 2,
       Paint()
-        ..color = color.withValues(alpha: 0.1)
+        ..color = color.withOpacity(0.1)
         ..strokeWidth = 3.0
         ..style = PaintingStyle.stroke,
     );
@@ -174,7 +174,7 @@ class _LoadingPainter extends CustomPainter {
         Offset(x, y),
         2.0,
         Paint()
-          ..color = color.withValues(alpha: dotOpacity * 0.8)
+          ..color = color.withOpacity(dotOpacity * 0.8)
           ..style = PaintingStyle.fill,
       );
     }
