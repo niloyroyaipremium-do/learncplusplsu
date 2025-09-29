@@ -1,3 +1,4 @@
+// Enhanced C++ Variables Tutorial with new theme
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,73 +6,46 @@ import '../providers/app_provider.dart';
 import '../../core/theme/tutorial_theme.dart';
 import '../../widgets/tutorial_widgets.dart';
 
-class CppVariablesTutorial extends StatefulWidget {
-  const CppVariablesTutorial({super.key});
+class EnhancedCppVariablesTutorial extends StatefulWidget {
+  const EnhancedCppVariablesTutorial({super.key});
 
   @override
-  State<CppVariablesTutorial> createState() => _CppVariablesTutorialState();
+  State<EnhancedCppVariablesTutorial> createState() => _EnhancedCppVariablesTutorialState();
 }
 
-class _CppVariablesTutorialState extends State<CppVariablesTutorial>
+class _EnhancedCppVariablesTutorialState extends State<EnhancedCppVariablesTutorial>
     with TickerProviderStateMixin {
   late TabController _tabController;
   double _fontSize = 16.0;
 
-  final String _defaultCode = '''#include <iostream>
-using namespace std;
-
-int main() {
-    // Variable declarations
-    int age = 25;
-    double height = 5.9;
-    char grade = 'A';
-    string name = "John";
-    bool isEmployed = true;
-    int count = 10;
-    double price = 99.99;
-    string message = "Hello, World!";
-    
-    // Display variables
-    cout << "Name: " << name << endl;
-    cout << "Age: " << age << endl;
-    cout << "Height: " << height << " feet" << endl;
-    cout << "Grade: " << grade << endl;
-    cout << "Employed: " << isEmployed << endl;
-    cout << "Count: " << count << endl;
-    cout << "Price: " << price << endl;
-    cout << "Message: " << message << endl;
-    
-    return 0;
-}''';
-
   final List<VariableTutorialSection> _tutorialSections = [
     VariableTutorialSection(
-      title: "?? Variable Basics",
+      title: "🔢 Variable Basics",
       subtitle: "Understanding what variables are and how to use them!",
       content: "A variable in C++ is a named storage location in memory that holds a value. Think of it as a labeled box where you can store different types of data that your program can use and modify!",
     ),
     VariableTutorialSection(
-      title: "?? Variable Declaration",
+      title: "📝 Variable Declaration",
       subtitle: "Different ways to declare and initialize variables!",
       content: "Variables in C++ can be declared in several ways. You can declare them first and assign values later, or declare and initialize them at the same time.",
     ),
     VariableTutorialSection(
-      title: "?? Data Types",
+      title: "🏷️ Data Types",
       subtitle: "Understanding different data types for variables!",
       content: "C++ provides several built-in data types to store different kinds of values. Each data type has a specific size and range of values it can hold.",
     ),
     VariableTutorialSection(
-      title: "?? Variable Scope",
+      title: "🌐 Variable Scope",
       subtitle: "Understanding where variables can be used!",
       content: "Variable scope determines where in your program a variable can be accessed. Understanding scope is crucial for writing maintainable code.",
     ),
     VariableTutorialSection(
-      title: "? Constants",
+      title: "🔒 Constants",
       subtitle: "Creating variables that cannot be changed!",
       content: "Constants are variables whose values cannot be changed after initialization. They are useful for storing values that should remain fixed throughout the program.",
     ),
     VariableTutorialSection(
-      title: "?? Variable Examples",
+      title: "💡 Variable Examples",
       subtitle: "Real-world examples and practice problems!",
       content: "Let's look at practical examples of how variables are used in real C++ programs.",
     ),
@@ -200,7 +174,7 @@ int main() {
 
   String _getCodeExample(String title) {
     switch (title) {
-      case "?? Variable Basics":
+      case "🔢 Variable Basics":
         return '''#include <iostream>
 using namespace std;
 
@@ -221,7 +195,7 @@ int main() {
     
     return 0;
 }''';
-      case "?? Variable Declaration":
+      case "📝 Variable Declaration":
         return '''#include <iostream>
 using namespace std;
 
@@ -247,7 +221,7 @@ int main() {
     
     return 0;
 }''';
-      case "?? Data Types":
+      case "🏷️ Data Types":
         return '''#include <iostream>
 using namespace std;
 
@@ -279,7 +253,7 @@ int main() {
     
     return 0;
 }''';
-      case "?? Variable Scope":
+      case "🌐 Variable Scope":
         return '''#include <iostream>
 using namespace std;
 
@@ -302,7 +276,7 @@ int main() {
     
     return 0;
 }''';
-      case "? Constants":
+      case "🔒 Constants":
         return '''#include <iostream>
 using namespace std;
 
@@ -330,19 +304,49 @@ int main() {
     
     return 0;
 }''';
-      case "?? Variable Examples":
-        return _defaultCode;
+      case "💡 Variable Examples":
+        return '''#include <iostream>
+using namespace std;
+
+int main() {
+    // Variable declarations
+    int age = 25;
+    double height = 5.9;
+    char grade = 'A';
+    string name = "John";
+    bool isEmployed = true;
+    int count = 10;
+    double price = 99.99;
+    string message = "Hello, World!";
+    
+    // Display variables
+    cout << "Name: " << name << endl;
+    cout << "Age: " << age << endl;
+    cout << "Height: " << height << " feet" << endl;
+    cout << "Grade: " << grade << endl;
+    cout << "Employed: " << isEmployed << endl;
+    cout << "Count: " << count << endl;
+    cout << "Price: " << price << endl;
+    cout << "Message: " << message << endl;
+    
+    return 0;
+}''';
       default:
-        return _defaultCode;
+        return '''#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Learning C++ Variables!" << endl;
+    return 0;
+}''';
     }
   }
-
 
   Widget _buildKeyPoints(String sectionTitle, bool isDarkMode) {
     List<String> keyPoints = [];
     
     switch (sectionTitle) {
-      case "?? Variable Basics":
+      case "🔢 Variable Basics":
         keyPoints = [
           "Variables store data in memory",
           "Must be declared before use",
@@ -352,7 +356,7 @@ int main() {
           "Hold values that can change during program execution"
         ];
         break;
-      case "?? Variable Declaration":
+      case "📝 Variable Declaration":
         keyPoints = [
           "Declare first, assign later: int x; x = 5;",
           "Declare and initialize: int x = 5;",
@@ -362,7 +366,7 @@ int main() {
           "Initialize variables to avoid undefined behavior"
         ];
         break;
-      case "?? Data Types":
+      case "🏷️ Data Types":
         keyPoints = [
           "int: whole numbers (-2,147,483,648 to 2,147,483,647)",
           "double: decimal numbers with high precision",
@@ -372,7 +376,7 @@ int main() {
           "string: sequence of characters"
         ];
         break;
-      case "?? Variable Scope":
+      case "🌐 Variable Scope":
         keyPoints = [
           "Global scope: accessible throughout the program",
           "Local scope: accessible only within the function",
@@ -382,7 +386,7 @@ int main() {
           "Minimize global variables for better code organization"
         ];
         break;
-      case "? Constants":
+      case "🔒 Constants":
         keyPoints = [
           "const: value cannot be changed after initialization",
           "#define: preprocessor constant",
@@ -392,7 +396,7 @@ int main() {
           "Constants prevent accidental modifications"
         ];
         break;
-      case "?? Variable Examples":
+      case "💡 Variable Examples":
         keyPoints = [
           "Practice with different data types",
           "Try modifying variable values",
@@ -404,54 +408,12 @@ int main() {
         break;
     }
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDarkMode ? Colors.blue[900] : Colors.blue[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDarkMode ? Colors.blue[700]! : Colors.blue[200]!,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "?? Key Points",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: isDarkMode ? Colors.white : Colors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ...keyPoints.map((point) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "� ",
-                  style: TextStyle(
-                    fontSize: _fontSize,
-                    color: isDarkMode ? Colors.blue[300] : Colors.blue[700],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    point,
-                    style: TextStyle(
-                      fontSize: _fontSize,
-                      color: isDarkMode ? Colors.grey[300] : Colors.grey[700],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )).toList(),
-        ],
-      ),
+    return TutorialCard(
+      title: '🔑 Key Points',
+      content: keyPoints.map((point) => '• $point').join('\n'),
+      icon: Icons.lightbulb_outline,
+      iconColor: TutorialTheme.tutorialWarning,
+      isDarkMode: isDarkMode,
     );
   }
 }

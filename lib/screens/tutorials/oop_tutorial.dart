@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/app_provider.dart';
 import '../../widgets/syntax_highlighted_editor.dart';
+import '../../core/theme/tutorial_theme.dart';
+import '../../widgets/tutorial_widgets.dart';
 
 /// Comprehensive OOP Tutorial Screen
 /// This screen provides a complete guide to Object-Oriented Programming in C++
@@ -565,18 +567,26 @@ int main() {
       builder: (context, appProvider, child) {
         return Scaffold(
           backgroundColor: appProvider.isDarkMode
-              ? const Color(0xFF1E1E1E)
-              : const Color(0xFFF5F5F5),
+              ? TutorialTheme.darkTutorialBackground
+              : TutorialTheme.lightTutorialBackground,
           appBar: AppBar(
-            title: const Text('OOP Tutorial'),
-            backgroundColor: Theme.of(context).primaryColor,
+            title: Text(
+              'OOP Tutorial',
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: appProvider.isDarkMode
+                ? TutorialTheme.darkTutorialPrimary
+                : TutorialTheme.tutorialPrimary,
             foregroundColor: Colors.white,
-            bottom: TabBar(
+            elevation: 0,
+            bottom: TutorialTabBar(
               controller: _tabController,
-              isScrollable: true,
-              tabs: _sections
-                  .map((section) => Tab(text: section.title))
-                  .toList(),
+              tabs: _sections.map((section) => section.title).toList(),
+              isDarkMode: appProvider.isDarkMode,
             ),
           ),
           body: TabBarView(
@@ -600,87 +610,24 @@ int main() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Content
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: appProvider.isDarkMode
-                  ? const Color(0xFF2D2D30)
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Text(
-              section.content,
-              style: TextStyle(
-                fontSize: 16,
-                color: appProvider.isDarkMode ? Colors.white : Colors.black87,
-                height: 1.6,
-              ),
-            ),
+          TutorialCard(
+            title: section.title,
+            content: section.content,
+            icon: Icons.school,
+            iconColor: appProvider.isDarkMode
+                ? TutorialTheme.darkTutorialPrimary
+                : TutorialTheme.tutorialPrimary,
+            isDarkMode: appProvider.isDarkMode,
           ),
 
           const SizedBox(height: 20),
 
           // Code Example
-          Container(
-            decoration: BoxDecoration(
-              color: appProvider.isDarkMode
-                  ? const Color(0xFF0C0C0C)
-                  : const Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: appProvider.isDarkMode
-                        ? const Color(0xFF37373D)
-                        : Colors.grey[200],
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.code, size: 16, color: Colors.blue),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Code Example',
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 400,
-                  padding: const EdgeInsets.all(12),
-                  child: SyntaxHighlightedEditor(
-                    controller: TextEditingController(
-                      text: section.codeExample,
-                    ),
-                    isDarkMode: appProvider.isDarkMode,
-                    fontSize: 14.0,
-                    onChanged: null,
-                  ),
-                ),
-              ],
-            ),
+          TutorialCodeBlock(
+            title: 'Code Example',
+            code: section.codeExample,
+            isDarkMode: appProvider.isDarkMode,
+            fontSize: 14.0,
           ),
 
           const SizedBox(height: 20),
@@ -690,29 +637,31 @@ int main() {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (_currentSection > 0)
-                ElevatedButton.icon(
+                TutorialButton(
+                  text: 'Previous',
+                  type: TutorialButtonType.secondary,
+                  icon: Icons.arrow_back,
                   onPressed: () {
                     _tabController.animateTo(_currentSection - 1);
                     setState(() {
                       _currentSection--;
                     });
                   },
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Previous'),
                 )
               else
                 const SizedBox.shrink(),
 
               if (_currentSection < _sections.length - 1)
-                ElevatedButton.icon(
+                TutorialButton(
+                  text: 'Next',
+                  type: TutorialButtonType.primary,
+                  icon: Icons.arrow_forward,
                   onPressed: () {
                     _tabController.animateTo(_currentSection + 1);
                     setState(() {
                       _currentSection++;
                     });
                   },
-                  icon: const Icon(Icons.arrow_forward),
-                  label: const Text('Next'),
                 )
               else
                 const SizedBox.shrink(),

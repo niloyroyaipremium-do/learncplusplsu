@@ -1,5 +1,8 @@
 // File: C++ String Data Type Tutorial - Comprehensive Guide
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../core/theme/tutorial_theme.dart';
+import '../../widgets/tutorial_widgets.dart';
 
 class CppStringTutorial extends StatefulWidget {
   const CppStringTutorial({super.key});
@@ -69,17 +72,21 @@ class _CppStringTutorialState extends State<CppStringTutorial>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _isDarkMode ? Color(0xFF1A1A1A) : Color(0xFFF5F5F5),
+      backgroundColor: _isDarkMode 
+          ? TutorialTheme.darkTutorialBackground 
+          : TutorialTheme.lightTutorialBackground,
       appBar: AppBar(
         title: Text(
           '📝 C++ String Tutorial',
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
             fontSize: 24,
             color: Colors.white,
           ),
         ),
-        backgroundColor: _isDarkMode ? Color(0xFF2A2A2A) : Color(0xFF1A73E8),
+        backgroundColor: _isDarkMode 
+            ? TutorialTheme.darkTutorialPrimary 
+            : TutorialTheme.tutorialPrimary,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -107,71 +114,19 @@ class _CppStringTutorialState extends State<CppStringTutorial>
             child: Icon(Icons.text_fields),
           ),
         ],
-        bottom: TabBar(
+        bottom: TutorialTabBar(
           controller: _tabController,
-          isScrollable: true,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          onTap: (index) {
-            _pageController.animateToPage(
-              index,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          },
-          tabs: _tutorialSections
-              .map(
-                (section) => Tab(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          section.title.split(' ')[0], // Emoji
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          section.title.split(' ').skip(1).join(' '),
-                          style: TextStyle(fontSize: 12),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
+          tabs: _tutorialSections.map((section) => section.title).toList(),
+          isDarkMode: _isDarkMode,
         ),
       ),
       body: Column(
         children: [
           // Progress indicator
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: LinearProgressIndicator(
-                    value: (_currentPage + 1) / _tutorialSections.length,
-                    backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Color(0xFF1A73E8),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Text(
-                  '${_currentPage + 1} / ${_tutorialSections.length}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: _isDarkMode ? Colors.white : Colors.black87,
-                  ),
-                ),
-              ],
-            ),
+          TutorialProgressIndicator(
+            currentStep: _currentPage + 1,
+            totalSteps: _tutorialSections.length,
+            isDarkMode: _isDarkMode,
           ),
           // Page content
           Expanded(
@@ -196,48 +151,17 @@ class _CppStringTutorialState extends State<CppStringTutorial>
 
   Widget _buildTutorialPage(StringTutorialSection section) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
-          Container(
-            padding: EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF1A73E8), Color(0xFF4285F4)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFF1A73E8).withValues(alpha: 0.3),
-                  blurRadius: 15,
-                  offset: Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  section.title,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  section.subtitle,
-                  style: TextStyle(fontSize: 18, color: Colors.white70),
-                ),
-              ],
-            ),
+          TutorialHeader(
+            title: section.title,
+            subtitle: section.subtitle,
+            isDarkMode: _isDarkMode,
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           // Content
           section.content(context, _isDarkMode, _fontSize),
         ],
@@ -683,47 +607,14 @@ int main() {
 
 // Helper function to build colorful info cards
 Widget _buildInfoCard(String title, String content, bool isDarkMode) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 16),
-    padding: EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: isDarkMode ? Color(0xFF2A2A2A) : Color(0xFFFFFFFF),
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(
-        color: isDarkMode ? Color(0xFF1A73E8) : Color(0xFFE3F2FD),
-        width: 2,
-      ),
-      boxShadow: [
-        BoxShadow(
-          color: (isDarkMode ? Color(0xFF1A73E8) : Color(0xFF4D96FF))
-              .withValues(alpha: 0.1),
-          blurRadius: 10,
-          offset: Offset(0, 4),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: isDarkMode ? Color(0xFF1A73E8) : Color(0xFF4D96FF),
-          ),
-        ),
-        SizedBox(height: 12),
-        Text(
-          content,
-          style: TextStyle(
-            fontSize: 16,
-            height: 1.6,
-            color: isDarkMode ? Color(0xFFFFFFFF) : Color(0xFF2D3748),
-          ),
-        ),
-      ],
-    ),
+  return TutorialCard(
+    title: title,
+    content: content,
+    icon: Icons.info_outline,
+    iconColor: isDarkMode 
+        ? TutorialTheme.darkTutorialPrimary 
+        : TutorialTheme.tutorialPrimary,
+    isDarkMode: isDarkMode,
   );
 }
 
@@ -734,67 +625,10 @@ Widget _buildCodeExample(
   bool isDarkMode,
   double fontSize,
 ) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 16),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: (isDarkMode ? Color(0xFF1A73E8) : Color(0xFF4D96FF))
-              .withValues(alpha: 0.2),
-          blurRadius: 15,
-          offset: Offset(0, 8),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: isDarkMode ? Color(0xFF1A73E8) : Color(0xFF4D96FF),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.code, color: Colors.white, size: 24),
-              SizedBox(width: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: isDarkMode ? Color(0xFF1E1E1E) : Color(0xFFF8F9FA),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-            ),
-          ),
-          child: SelectableText(
-            code,
-            style: TextStyle(
-              fontFamily: 'Courier',
-              fontSize: fontSize,
-              color: isDarkMode ? Colors.white : Colors.black87,
-              height: 1.4,
-            ),
-          ),
-        ),
-      ],
-    ),
+  return TutorialCodeBlock(
+    title: title,
+    code: code,
+    isDarkMode: isDarkMode,
+    fontSize: fontSize,
   );
 }
