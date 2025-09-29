@@ -17,6 +17,9 @@ class LessonProvider extends ChangeNotifier {
   bool _isInitialized = false;
 
   LessonProvider() {
+    // Initialize synchronously with default lessons first
+    _loadDefaultLessons();
+    // Then initialize asynchronously
     _initializeLessons();
   }
 
@@ -25,8 +28,9 @@ class LessonProvider extends ChangeNotifier {
 
     try {
       await _loadProgress();
-      _loadDefaultLessons();
+      // Default lessons are already loaded in constructor
       _isInitialized = true;
+      notifyListeners(); // Notify listeners that initialization is complete
       Logger.info(
         'Lesson provider initialized with ${_lessons.length} lessons',
       );
@@ -36,8 +40,9 @@ class LessonProvider extends ChangeNotifier {
         code: 'lesson_provider_init_error',
         details: e.toString(),
       );
-      _loadDefaultLessons(); // Fallback to default lessons
+      // Default lessons are already loaded in constructor
       _isInitialized = true;
+      notifyListeners(); // Notify listeners that initialization is complete
     }
   }
 

@@ -42,6 +42,7 @@ import 'screens/tutorials/tutorial_navigation_screen.dart';
 import 'screens/tutorials/string_tutorial.dart';
 import 'screens/tutorials/oop_tutorial.dart';
 import 'screens/test_screen.dart';
+import 'screens/provider_test_screen.dart';
 import 'widgets/responsive_wrapper.dart';
 
 // Services
@@ -197,6 +198,7 @@ class LearnCppApp extends StatelessWidget {
           builder: (context, state) => const OopTutorialScreen(),
         ),
         GoRoute(path: '/test', builder: (context, state) => const TestScreen()),
+        GoRoute(path: '/provider-test', builder: (context, state) => const ProviderTestScreen()),
       ],
     );
   }
