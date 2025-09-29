@@ -551,6 +551,13 @@ int main() {
   void initState() {
     super.initState();
     _tabController = TabController(length: _sections.length, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        setState(() {
+          _currentSection = _tabController.index;
+        });
+      }
+    });
   }
 
   @override
@@ -693,9 +700,6 @@ int main() {
                 ElevatedButton.icon(
                   onPressed: () {
                     _tabController.animateTo(_currentSection - 1);
-                    setState(() {
-                      _currentSection--;
-                    });
                   },
                   icon: const Icon(Icons.arrow_back),
                   label: const Text('Previous'),
@@ -707,9 +711,6 @@ int main() {
                 ElevatedButton.icon(
                   onPressed: () {
                     _tabController.animateTo(_currentSection + 1);
-                    setState(() {
-                      _currentSection++;
-                    });
                   },
                   icon: const Icon(Icons.arrow_forward),
                   label: const Text('Next'),
