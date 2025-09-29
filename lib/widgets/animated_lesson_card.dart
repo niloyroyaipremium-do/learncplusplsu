@@ -119,14 +119,14 @@ class _AnimatedLessonCardState extends State<AnimatedLessonCard>
                         end: Alignment.bottomRight,
                         colors: [
                           Theme.of(context).cardColor,
-                          Theme.of(context).cardColor.withValues(alpha: 0.8),
+                          Theme.of(context).cardColor.withOpacity(0.8),
                         ],
                       ),
                       boxShadow: [
                         BoxShadow(
                           color: _getDifficultyColor(
                             widget.lesson.difficulty,
-                          ).withValues(alpha: 0.1),
+                          ).withOpacity(0.1),
                           blurRadius: _isHovered ? 20 : 10,
                           offset: Offset(0, _isHovered ? 8 : 4),
                         ),
@@ -159,7 +159,7 @@ class _AnimatedLessonCardState extends State<AnimatedLessonCard>
                                           ),
                                           colors: [
                                             Colors.transparent,
-                                            Colors.white.withValues(alpha: 0.1),
+                                            Colors.white.withOpacity(0.1),
                                             Colors.transparent,
                                           ],
                                         ),
@@ -186,10 +186,10 @@ class _AnimatedLessonCardState extends State<AnimatedLessonCard>
                                             colors: [
                                               _getDifficultyColor(
                                                 widget.lesson.difficulty,
-                                              ).withValues(alpha: 0.2),
+                                              ).withOpacity(0.2),
                                               _getDifficultyColor(
                                                 widget.lesson.difficulty,
-                                              ).withValues(alpha: 0.1),
+                                              ).withOpacity(0.1),
                                             ],
                                           ),
                                           borderRadius: BorderRadius.circular(
@@ -198,7 +198,7 @@ class _AnimatedLessonCardState extends State<AnimatedLessonCard>
                                           border: Border.all(
                                             color: _getDifficultyColor(
                                               widget.lesson.difficulty,
-                                            ).withValues(alpha: 0.3),
+                                            ).withOpacity(0.3),
                                             width: 1,
                                           ),
                                         ),
@@ -219,9 +219,7 @@ class _AnimatedLessonCardState extends State<AnimatedLessonCard>
                                         Container(
                                           padding: const EdgeInsets.all(6),
                                           decoration: BoxDecoration(
-                                            color: Colors.green.withValues(
-                                              alpha: 0.1,
-                                            ),
+                                            color: Colors.green.withOpacity(0.1),
                                             borderRadius: BorderRadius.circular(
                                               12,
                                             ),
@@ -304,7 +302,7 @@ class _AnimatedLessonCardState extends State<AnimatedLessonCard>
                                         decoration: BoxDecoration(
                                           color: _getDifficultyColor(
                                             widget.lesson.difficulty,
-                                          ).withValues(alpha: 0.1),
+                                          ).withOpacity(0.1),
                                           borderRadius: BorderRadius.circular(
                                             12,
                                           ),

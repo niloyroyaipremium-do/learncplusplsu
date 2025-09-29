@@ -16,14 +16,14 @@ class UserRepositoryImpl implements UserRepository {
       final userModel = await _localStorage.getUserProfile();
       if (userModel == null) {
         // Return default user profile
-        return const UserProfile(
+        return UserProfile(
           id: 'default',
           name: '',
           email: '',
           avatar: '',
           level: 1,
           totalXP: 0,
-          joinedDate: '2024-01-01',
+          joinedDate: DateTime(2024, 1, 1),
           currentStreak: 0,
           longestStreak: 0,
           hearts: 5,
@@ -234,14 +234,14 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<void> resetProgress() async {
     try {
-      const defaultUser = UserProfile(
+      final defaultUser = UserProfile(
         id: 'default',
         name: '',
         email: '',
         avatar: '',
         level: 1,
         totalXP: 0,
-        joinedDate: '2024-01-01',
+        joinedDate: DateTime(2024, 1, 1),
         currentStreak: 0,
         longestStreak: 0,
         hearts: 5,

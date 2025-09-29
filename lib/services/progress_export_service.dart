@@ -1,36 +1,65 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/app_provider.dart';
 import '../providers/progress_provider.dart';
-import 'database_service.dart';
+import '../utils/logger.dart';
 
 class ProgressExportService {
-  static const String _exportFileName = 'learn_cpp_progress.json';
+  static Future<bool> hasProgressToExport(AppProvider appProvider) async {
+    // Check if there's any meaningful progress to export
+    return appProvider.totalXP > 0 || 
+           appProvider.lessonsCompleted > 0 || 
+           appProvider.quizzesPassed > 0;
+  }
 
-  /// Export user progress to a JSON file and share it
   static Future<bool> exportProgress({
     required AppProvider appProvider,
     required ProgressProvider progressProvider,
   }) async {
     try {
-      // Collect all progress data
-      final progressData = await _collectProgressData(
-        appProvider,
-        progressProvider,
-      );
+      // Create progress data
+      final progressData = {
+        'exportDate': DateTime.now().toIso8601String(),
+        'appVersion': '1.0.0',
+        'userProfile': {
+          'name': appProvider.userProfile.name,
+          'email': appProvider.userProfile.email,
+          'level': appProvider.userProfile.level,
+          'totalXP': appProvider.userProfile.totalXP,
+          'currentStreak': appProvider.userProfile.currentStreak,
+          'longestStreak': appProvider.userProfile.longestStreak,
+          'hearts': appProvider.userProfile.hearts,
+          'lessonsCompleted': appProvider.userProfile.lessonsCompleted,
+          'quizzesPassed': appProvider.userProfile.quizzesPassed,
+          'achievements': appProvider.userProfile.achievements,
+        },
+        'progress': {
+          'totalPoints': progressProvider.totalPoints,
+          'streak': progressProvider.streak,
+          'lessonsCompleted': progressProvider.lessonsCompleted,
+          'quizzesPassed': progressProvider.quizzesPassed,
+          'totalStudyTime': progressProvider.getTotalStudyTime(),
+        },
+        'statistics': {
+          'exportTimestamp': DateTime.now().millisecondsSinceEpoch,
+          'deviceInfo': {
+            'platform': Platform.operatingSystem,
+            'version': Platform.operatingSystemVersion,
+          },
+        },
+      };
 
       // Convert to JSON
-      final jsonString = json.encode(progressData);
+      final jsonString = const JsonEncoder.withIndent('  ').convert(progressData);
 
-      // Get the directory for saving the file
+      // Get documents directory
       final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/$_exportFileName');
+      final fileName = 'learn_cpp_progress_${DateTime.now().millisecondsSinceEpoch}.json';
+      final file = File('${directory.path}/$fileName');
 
-      // Write the file
+      // Write to file
       await file.writeAsString(jsonString);
 
       // Share the file
@@ -40,151 +69,37 @@ class ProgressExportService {
         subject: 'Learn C++ Progress Data',
       );
 
+      Logger.info('Progress exported successfully to: ${file.path}');
       return true;
     } catch (e) {
-      debugPrint('Error exporting progress: $e');
+      Logger.error('Failed to export progress: $e');
       return false;
     }
   }
 
-  /// Collect all progress data from various sources
-  static Future<Map<String, dynamic>> _collectProgressData(
-    AppProvider appProvider,
-    ProgressProvider progressProvider,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    // Get all stored data
-    final allKeys = prefs.getKeys();
-    final sharedPrefsData = <String, dynamic>{};
-
-    for (final key in allKeys) {
-      final value = prefs.get(key);
-      if (value != null) {
-        sharedPrefsData[key] = value;
-      }
-    }
-
-    // Quiz results and achievements removed - using progress provider data instead
-    final quizResults = <Map<String, dynamic>>[];
-    final achievements = <Map<String, dynamic>>[];
-
-    // Collect database statistics
-    final databaseStats = await _getDatabaseStatistics();
-
-    return {
-      'export_info': {
-        'app_name': 'Learn C++',
-        'export_date': DateTime.now().toIso8601String(),
-        'app_version': '1.0.0',
-        'platform': Platform.operatingSystem,
-      },
-      'user_profile': {
-        'name': appProvider.userName,
-        'email': appProvider.userEmail,
-        'avatar': appProvider.userAvatar,
-        'total_xp': appProvider.totalXP,
-        'level': appProvider.level,
-        'current_streak': appProvider.currentStreak,
-        'longest_streak': appProvider.longestStreak,
-        'hearts': appProvider.hearts,
-        'last_active_date': appProvider.userProfile.lastActiveDate
-            ?.toIso8601String(),
-        'lessons_completed': appProvider.lessonsCompleted,
-        'quizzes_passed': appProvider.quizzesPassed,
-        'xp_today': appProvider.xpToday,
-        'is_first_launch': appProvider.userProfile.isFirstLaunch,
-      },
-      'progress_stats': {
-        'total_points': progressProvider.totalPoints,
-        'streak': progressProvider.streak,
-        'lessons_completed': progressProvider.lessonsCompleted,
-        'quizzes_passed': progressProvider.quizzesPassed,
-      },
-      'achievements': achievements,
-      'quiz_results': quizResults,
-      'database_statistics': databaseStats,
-      'app_settings': {
-        'theme_mode': appProvider.themeMode.toString(),
-        'font_size': appProvider.fontSize,
-        'is_first_launch': appProvider.isFirstLaunch,
-      },
-      'raw_shared_preferences': sharedPrefsData,
-    };
-  }
-
-  /// Get database statistics
-  static Future<Map<String, dynamic>> _getDatabaseStatistics() async {
+  static Future<Map<String, dynamic>?> importProgress(String filePath) async {
     try {
-      final databaseService = DatabaseService();
-      final stats = await databaseService.getStatistics();
-      return stats;
+      final file = File(filePath);
+      if (!await file.exists()) {
+        Logger.error('Import file does not exist: $filePath');
+        return null;
+      }
+
+      final jsonString = await file.readAsString();
+      final progressData = json.decode(jsonString) as Map<String, dynamic>;
+
+      // Validate the data structure
+      if (!progressData.containsKey('userProfile') || 
+          !progressData.containsKey('progress')) {
+        Logger.error('Invalid progress data format');
+        return null;
+      }
+
+      Logger.info('Progress imported successfully from: $filePath');
+      return progressData;
     } catch (e) {
-      debugPrint('Error getting database statistics: $e');
-      return {};
+      Logger.error('Failed to import progress: $e');
+      return null;
     }
-  }
-
-  /// Generate a summary of the progress data
-  static String generateProgressSummary(Map<String, dynamic> progressData) {
-    final userProfile = progressData['user_profile'] as Map<String, dynamic>;
-    final progressStats =
-        progressData['progress_stats'] as Map<String, dynamic>;
-    final achievements = progressData['achievements'] as List<dynamic>;
-    final quizResults = progressData['quiz_results'] as List<dynamic>;
-    final dbStats = progressData['database_statistics'] as Map<String, dynamic>;
-
-    final unlockedAchievements = achievements
-        .where((a) => a['is_unlocked'] == true)
-        .length;
-    final totalQuizScore = quizResults.fold<int>(
-      0,
-      (sum, quiz) => sum + (quiz['score'] as int? ?? 0),
-    );
-    final averageQuizScore = quizResults.isNotEmpty
-        ? totalQuizScore / quizResults.length
-        : 0;
-
-    return '''
-Learn C++ Progress Summary
-========================
-
-User: ${userProfile['name'] ?? 'Guest User'}
-Level: ${userProfile['level'] ?? 1}
-Total XP: ${userProfile['total_xp'] ?? 0}
-Current Streak: ${userProfile['current_streak'] ?? 0}
-Longest Streak: ${userProfile['longest_streak'] ?? 0}
-Hearts: ${userProfile['hearts'] ?? 5}
-
-Progress:
-- Lessons Completed: ${progressStats['lessons_completed'] ?? 0}
-- Quizzes Passed: ${progressStats['quizzes_passed'] ?? 0}
-- Total Points: ${progressStats['total_points'] ?? 0}
-
-Achievements:
-- Unlocked: $unlockedAchievements / ${achievements.length}
-- Total Available: ${dbStats['total_achievements'] ?? 0}
-
-Quiz Performance:
-- Total Quizzes Taken: ${quizResults.length}
-- Average Score: ${averageQuizScore.toStringAsFixed(1)}%
-- Total Quiz Score: $totalQuizScore
-
-Database Statistics:
-- Total Lessons: ${dbStats['total_lessons'] ?? 0}
-- Completed Lessons: ${dbStats['completed_lessons'] ?? 0}
-- Total Quizzes: ${dbStats['total_quizzes'] ?? 0}
-
-Export Date: ${progressData['export_info']['export_date']}
-App Version: ${progressData['export_info']['app_version']}
-Platform: ${progressData['export_info']['platform']}
-''';
-  }
-
-  /// Check if export is available (has progress data)
-  static Future<bool> hasProgressToExport(AppProvider appProvider) async {
-    return appProvider.totalXP > 0 ||
-        appProvider.lessonsCompleted > 0 ||
-        appProvider.quizzesPassed > 0;
   }
 }

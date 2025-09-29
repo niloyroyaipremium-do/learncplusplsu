@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                         Theme.of(context).colorScheme.primary,
                         Theme.of(
                           context,
-                        ).colorScheme.primary.withValues(alpha: 0.8),
+                        ).colorScheme.primary.withOpacity(0.8),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                       BoxShadow(
                         color: Theme.of(
                           context,
-                        ).colorScheme.primary.withValues(alpha: 0.4),
+                        ).colorScheme.primary.withOpacity(0.4),
                         blurRadius: 15,
                         offset: const Offset(0, 6),
                       ),
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         'Ready to continue your C++ journey?',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.95),
+                          color: Colors.white.withOpacity(0.95),
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
@@ -332,9 +332,9 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.25),
+        color: Colors.white.withOpacity(0.25),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accentColor.withValues(alpha: 0.3), width: 1),
+        border: Border.all(color: accentColor.withOpacity(0.3), width: 1),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -353,7 +353,7 @@ class HomeScreen extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: Colors.white.withOpacity(0.9),
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -378,9 +378,9 @@ class HomeScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
+          color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -399,7 +399,7 @@ class HomeScreen extends StatelessWidget {
             Text(
               subtitle,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: color.withValues(alpha: 0.7),
+                color: color.withOpacity(0.7),
               ),
             ),
           ],

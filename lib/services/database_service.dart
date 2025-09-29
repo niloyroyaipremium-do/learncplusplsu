@@ -1,7 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../domain/entities/lesson.dart';
-import '../services/error_service.dart';
 import '../utils/logger.dart';
 
 class DatabaseService {
@@ -10,7 +8,6 @@ class DatabaseService {
   DatabaseService._internal();
 
   Database? _database;
-  bool _isInitialized = false;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -20,31 +17,23 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     try {
-      final databasePath = await getDatabasesPath();
-      final path = join(databasePath, 'codelingo.db');
+      final databasesPath = await getDatabasesPath();
+      final path = join(databasesPath, 'learn_cpp.db');
 
-      _database = await openDatabase(
+      return await openDatabase(
         path,
         version: 1,
         onCreate: _onCreate,
-        onUpgrade: _onUpgrade,
       );
-
-      _isInitialized = true;
-      Logger.info('Database initialized successfully');
-      return _database!;
     } catch (e) {
-      ErrorService().reportException(
-        e,
-        message: 'Failed to initialize database',
-      );
+      Logger.error('Failed to initialize database', e);
       rethrow;
     }
   }
 
   Future<void> _onCreate(Database db, int version) async {
     try {
-      // Lessons table
+      // Create lessons table
       await db.execute('''
         CREATE TABLE lessons (
           id TEXT PRIMARY KEY,
@@ -56,294 +45,100 @@ class DatabaseService {
           content TEXT NOT NULL,
           code_example TEXT NOT NULL,
           tags TEXT,
-          estimated_time_minutes INTEGER DEFAULT 5,
-          category TEXT DEFAULT 'General',
-          order_index INTEGER DEFAULT 0,
+          estimated_time_minutes INTEGER NOT NULL DEFAULT 5,
+          category TEXT NOT NULL DEFAULT 'General',
+          order_index INTEGER NOT NULL DEFAULT 0,
           metadata TEXT,
           created_at INTEGER NOT NULL,
           updated_at INTEGER NOT NULL
         )
       ''');
 
-      // User progress table
+      // Create user_progress table
       await db.execute('''
         CREATE TABLE user_progress (
-          id TEXT PRIMARY KEY,
-          total_xp INTEGER NOT NULL DEFAULT 0,
-          current_level INTEGER NOT NULL DEFAULT 1,
-          current_streak INTEGER NOT NULL DEFAULT 0,
-          longest_streak INTEGER NOT NULL DEFAULT 0,
-          hearts INTEGER NOT NULL DEFAULT 5,
-          lessons_completed INTEGER NOT NULL DEFAULT 0,
-          quizzes_passed INTEGER NOT NULL DEFAULT 0,
-          last_active_date INTEGER,
-          created_at INTEGER NOT NULL,
-          updated_at INTEGER NOT NULL
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          lesson_id TEXT NOT NULL,
+          completed_at INTEGER NOT NULL,
+          score INTEGER,
+          time_spent INTEGER,
+          FOREIGN KEY (lesson_id) REFERENCES lessons (id)
         )
       ''');
 
-      // Create indexes for better performance
-      await db.execute(
-        'CREATE INDEX idx_lessons_difficulty ON lessons(difficulty)',
-      );
-      await db.execute(
-        'CREATE INDEX idx_lessons_completed ON lessons(is_completed)',
-      );
+      // Create achievements table
+      await db.execute('''
+        CREATE TABLE achievements (
+          id TEXT PRIMARY KEY,
+          title TEXT NOT NULL,
+          description TEXT NOT NULL,
+          icon TEXT,
+          unlocked_at INTEGER,
+          created_at INTEGER NOT NULL
+        )
+      ''');
 
       Logger.info('Database tables created successfully');
     } catch (e) {
-      ErrorService().reportException(
-        e,
-        message: 'Failed to create database tables',
-      );
+      Logger.error('Failed to create database tables', e);
       rethrow;
     }
   }
 
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Handle database upgrades here
-    Logger.info('Database upgrade from version $oldVersion to $newVersion');
-  }
-
-  // Lesson operations
-  Future<void> insertLesson(Lesson lesson) async {
+  Future<Map<String, dynamic>> getStatistics() async {
     try {
       final db = await database;
-      await db.insert('lessons', {
-        'id': lesson.id,
-        'title': lesson.title,
-        'description': lesson.description,
-        'duration': lesson.duration,
-        'difficulty': lesson.difficulty,
-        'is_completed': lesson.isCompleted ? 1 : 0,
-        'content': lesson.content,
-        'code_example': lesson.codeExample,
-        'tags': lesson.tags.join(','),
-        'estimated_time_minutes': lesson.estimatedTimeMinutes,
-        'category': lesson.category,
-        'order_index': lesson.order,
-        'metadata': lesson.metadata.toString(),
-        'created_at': DateTime.now().millisecondsSinceEpoch,
-        'updated_at': DateTime.now().millisecondsSinceEpoch,
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
-      Logger.info('Lesson inserted: ${lesson.title}');
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to insert lesson');
-    }
-  }
+      
+      final lessonCount = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM lessons')
+      ) ?? 0;
+      
+      final completedCount = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM user_progress')
+      ) ?? 0;
+      
+      final achievementCount = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM achievements WHERE unlocked_at IS NOT NULL')
+      ) ?? 0;
 
-  Future<List<Lesson>> getAllLessons() async {
-    try {
-      final db = await database;
-      final List<Map<String, dynamic>> maps = await db.query(
-        'lessons',
-        orderBy: 'order_index ASC',
-      );
-
-      return maps
-          .map(
-            (map) => Lesson(
-              id: map['id'],
-              title: map['title'],
-              description: map['description'],
-              duration: map['duration'],
-              difficulty: map['difficulty'],
-              isCompleted: map['is_completed'] == 1,
-              content: map['content'],
-              codeExample: map['code_example'],
-              tags: map['tags']?.split(',') ?? [],
-              estimatedTimeMinutes: map['estimated_time_minutes'] ?? 5,
-              category: map['category'] ?? 'General',
-              order: map['order_index'] ?? 0,
-              metadata: {},
-            ),
-          )
-          .toList();
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to get all lessons');
-      return [];
-    }
-  }
-
-  Future<Lesson?> getLessonById(String id) async {
-    try {
-      final db = await database;
-      final List<Map<String, dynamic>> maps = await db.query(
-        'lessons',
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-
-      if (maps.isNotEmpty) {
-        final map = maps.first;
-        return Lesson(
-          id: map['id'],
-          title: map['title'],
-          description: map['description'],
-          duration: map['duration'],
-          difficulty: map['difficulty'],
-          isCompleted: map['is_completed'] == 1,
-          content: map['content'],
-          codeExample: map['code_example'],
-          tags: map['tags']?.split(',') ?? [],
-          estimatedTimeMinutes: map['estimated_time_minutes'] ?? 5,
-          category: map['category'] ?? 'General',
-          order: map['order_index'] ?? 0,
-          metadata: {},
-        );
-      }
-      return null;
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to get lesson by id');
-      return null;
-    }
-  }
-
-  Future<void> updateLesson(Lesson lesson) async {
-    try {
-      final db = await database;
-      await db.update(
-        'lessons',
-        {
-          'title': lesson.title,
-          'description': lesson.description,
-          'duration': lesson.duration,
-          'difficulty': lesson.difficulty,
-          'is_completed': lesson.isCompleted ? 1 : 0,
-          'content': lesson.content,
-          'code_example': lesson.codeExample,
-          'tags': lesson.tags.join(','),
-          'estimated_time_minutes': lesson.estimatedTimeMinutes,
-          'category': lesson.category,
-          'order_index': lesson.order,
-          'metadata': lesson.metadata.toString(),
-          'updated_at': DateTime.now().millisecondsSinceEpoch,
-        },
-        where: 'id = ?',
-        whereArgs: [lesson.id],
-      );
-      Logger.info('Lesson updated: ${lesson.title}');
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to update lesson');
-    }
-  }
-
-  Future<void> deleteLesson(String id) async {
-    try {
-      final db = await database;
-      await db.delete('lessons', where: 'id = ?', whereArgs: [id]);
-      Logger.info('Lesson deleted: $id');
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to delete lesson');
-    }
-  }
-
-  // User progress operations
-  Future<void> updateUserProgress({
-    required int totalXP,
-    required int currentLevel,
-    required int currentStreak,
-    required int longestStreak,
-    required int hearts,
-    required int lessonsCompleted,
-    required int quizzesPassed,
-    DateTime? lastActiveDate,
-  }) async {
-    try {
-      final db = await database;
-      await db.insert('user_progress', {
-        'id': 'main_progress',
-        'total_xp': totalXP,
-        'current_level': currentLevel,
-        'current_streak': currentStreak,
-        'longest_streak': longestStreak,
-        'hearts': hearts,
-        'lessons_completed': lessonsCompleted,
-        'quizzes_passed': quizzesPassed,
-        'last_active_date': lastActiveDate?.millisecondsSinceEpoch,
-        'created_at': DateTime.now().millisecondsSinceEpoch,
-        'updated_at': DateTime.now().millisecondsSinceEpoch,
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
-      Logger.info('User progress updated');
-    } catch (e) {
-      ErrorService().reportException(
-        e,
-        message: 'Failed to update user progress',
-      );
-    }
-  }
-
-  Future<Map<String, dynamic>?> getUserProgress() async {
-    try {
-      final db = await database;
-      final List<Map<String, dynamic>> maps = await db.query(
-        'user_progress',
-        where: 'id = ?',
-        whereArgs: ['main_progress'],
-      );
-
-      if (maps.isNotEmpty) {
-        return maps.first;
-      }
-      return null;
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to get user progress');
-      return null;
-    }
-  }
-
-  // Statistics
-  Future<Map<String, int>> getStatistics() async {
-    try {
-      final db = await database;
-
-      final lessonCount =
-          Sqflite.firstIntValue(
-            await db.rawQuery('SELECT COUNT(*) FROM lessons'),
-          ) ??
-          0;
-      final completedLessons =
-          Sqflite.firstIntValue(
-            await db.rawQuery(
-              'SELECT COUNT(*) FROM lessons WHERE is_completed = 1',
-            ),
-          ) ??
-          0;
       return {
         'total_lessons': lessonCount,
-        'completed_lessons': completedLessons,
+        'completed_lessons': completedCount,
+        'unlocked_achievements': achievementCount,
       };
     } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to get statistics');
+      Logger.error('Failed to get database statistics', e);
       return {};
     }
   }
 
-  // Cleanup operations
+  Future<List<Map<String, dynamic>>> getAllLessons() async {
+    try {
+      final db = await database;
+      return await db.query('lessons', orderBy: 'order_index ASC');
+    } catch (e) {
+      Logger.error('Failed to get all lessons', e);
+      return [];
+    }
+  }
+
   Future<void> clearAllData() async {
     try {
       final db = await database;
-      await db.delete('lessons');
       await db.delete('user_progress');
+      await db.delete('achievements');
       Logger.info('All data cleared from database');
     } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to clear all data');
+      Logger.error('Failed to clear all data', e);
+      rethrow;
     }
   }
 
   Future<void> close() async {
-    try {
-      final db = _database;
-      if (db != null) {
-        await db.close();
-        _database = null;
-        _isInitialized = false;
-        Logger.info('Database closed');
-      }
-    } catch (e) {
-      ErrorService().reportException(e, message: 'Failed to close database');
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
     }
   }
-
-  bool get isInitialized => _isInitialized;
 }

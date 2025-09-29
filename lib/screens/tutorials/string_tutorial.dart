@@ -212,7 +212,7 @@ class _CppStringTutorialState extends State<CppStringTutorial>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF1A73E8).withValues(alpha: 0.3),
+                  color: Color(0xFF1A73E8).withOpacity(0.3),
                   blurRadius: 15,
                   offset: Offset(0, 8),
                 ),
@@ -696,7 +696,7 @@ Widget _buildInfoCard(String title, String content, bool isDarkMode) {
       boxShadow: [
         BoxShadow(
           color: (isDarkMode ? Color(0xFF1A73E8) : Color(0xFF4D96FF))
-              .withValues(alpha: 0.1),
+              .withOpacity(0.1),
           blurRadius: 10,
           offset: Offset(0, 4),
         ),
@@ -741,7 +741,7 @@ Widget _buildCodeExample(
       boxShadow: [
         BoxShadow(
           color: (isDarkMode ? Color(0xFF1A73E8) : Color(0xFF4D96FF))
-              .withValues(alpha: 0.2),
+              .withOpacity(0.2),
           blurRadius: 15,
           offset: Offset(0, 8),
         ),
