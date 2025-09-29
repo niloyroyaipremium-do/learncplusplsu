@@ -2,6 +2,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'notification_service.dart';
 import 'error_service.dart';
 import 'background_service.dart';
+import 'crash_reporting_service.dart';
 import '../utils/logger.dart';
 
 class AppInitializationService {
@@ -21,6 +22,10 @@ class AppInitializationService {
 
       // Initialize error service first
       ErrorService();
+
+      // Initialize crash reporting service
+      final crashReportingService = CrashReportingService();
+      await crashReportingService.initialize();
 
       // Initialize other services
       final notificationService = NotificationService();

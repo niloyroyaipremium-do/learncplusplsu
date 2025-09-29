@@ -76,6 +76,12 @@ dependencies:
   # Background processing
   workmanager: ^0.5.2
   flutter_background_service: ^5.0.5
+  
+  # Desktop support
+  window_manager: ^0.3.7
+  desktop_window: ^0.4.0
+  system_tray: ^2.0.3
+  hotkey_manager: ^0.1.6
 
 dev_dependencies:
   flutter_test:

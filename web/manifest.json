@@ -1,23 +1,25 @@
 {
-    "name": "codelingo",
-    "short_name": "codelingo",
+    "name": "CodeLingo - Learn C++ Programming",
+    "short_name": "CodeLingo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#2E7D32",
+    "theme_color": "#2E7D32",
+    "description": "A comprehensive Flutter application for learning C++ programming with an integrated IDE, interactive tutorials, and gamified learning experience.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
             "src": "icons/Icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
             "src": "icons/Icon-maskable-192.png",
@@ -31,5 +33,88 @@
             "type": "image/png",
             "purpose": "maskable"
         }
-    ]
+    ],
+    "screenshots": [
+        {
+            "src": "screenshots/home.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "CodeLingo Home Screen"
+        },
+        {
+            "src": "screenshots/ide.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "CodeLingo IDE"
+        },
+        {
+            "src": "screenshots/tutorials.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Interactive Tutorials"
+        }
+    ],
+    "categories": [
+        "education",
+        "developer",
+        "productivity"
+    ],
+    "lang": "en",
+    "dir": "ltr",
+    "scope": "/",
+    "id": "codelingo-app",
+    "shortcuts": [
+        {
+            "name": "Open IDE",
+            "short_name": "IDE",
+            "description": "Open the code editor",
+            "url": "/ide",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Tutorials",
+            "short_name": "Learn",
+            "description": "Browse tutorials",
+            "url": "/tutorials",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Challenges",
+            "short_name": "Practice",
+            "description": "Daily coding challenges",
+            "url": "/challenges",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.codelingo.app",
+            "id": "com.codelingo.app"
+        }
+    ],
+    "edge_side_panel": {
+        "preferred_width": 400
+    },
+    "launch_handler": {
+        "client_mode": "navigate-existing"
+    }
 }
