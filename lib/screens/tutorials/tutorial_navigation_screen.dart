@@ -272,7 +272,7 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF1A73E8).withOpacity(0.3), // CORRECTED
+                  color: const Color(0xFF1A73E8).withOpacity(0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -334,7 +334,7 @@ class _TutorialNavigationScreenState extends State<TutorialNavigationScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: (_isDarkMode ? Colors.black : Colors.grey).withOpacity(0.1), // CORRECTED
+            color: (_isDarkMode ? Colors.black : Colors.grey).withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

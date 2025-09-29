@@ -147,7 +147,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         border: Border.all(
           color: _isFocused
               ? Theme.of(context).primaryColor
-              : Colors.grey.withValues(alpha: 0.3),
+              : Colors.grey.withOpacity(0.3),
           width: _isFocused ? 2 : 1,
         ),
         borderRadius: BorderRadius.circular(8),
