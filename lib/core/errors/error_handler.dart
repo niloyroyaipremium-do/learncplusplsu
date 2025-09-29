@@ -71,52 +71,52 @@ class ErrorHandler {
     String? actionText;
 
     switch (exception.runtimeType) {
-      case NetworkException:
+      case NetworkException _:
         userMessage =
             'Network connection failed. Please check your internet connection.';
         actionText = 'Retry';
         break;
-      case DataException:
+      case DataException _:
         userMessage = 'Data operation failed. Please try again.';
         actionText = 'Retry';
         break;
-      case CodeExecutionException:
+      case CodeExecutionException _:
         userMessage = 'Code execution failed: ${exception.message}';
         actionText = 'Check Code';
         break;
-      case ValidationException:
+      case ValidationException _:
         userMessage = 'Validation error: ${exception.message}';
         actionText = 'Fix';
         break;
-      case AuthenticationException:
+      case AuthenticationException _:
         userMessage = 'Authentication failed. Please log in again.';
         actionText = 'Login';
         break;
-      case FileException:
+      case FileException _:
         userMessage = 'File operation failed. Please try again.';
         actionText = 'Retry';
         break;
-      case StorageException:
+      case StorageException _:
         userMessage = 'Storage operation failed. Please try again.';
         actionText = 'Retry';
         break;
-      case LessonException:
+      case LessonException _:
         userMessage = 'Lesson operation failed: ${exception.message}';
         actionText = 'Retry';
         break;
-      case UserProfileException:
+      case UserProfileException _:
         userMessage = 'Profile operation failed: ${exception.message}';
         actionText = 'Retry';
         break;
-      case ConfigurationException:
+      case ConfigurationException _:
         userMessage = 'Configuration error: ${exception.message}';
         actionText = 'Settings';
         break;
-      case TimeoutException:
+      case TimeoutException _:
         userMessage = 'Operation timed out. Please try again.';
         actionText = 'Retry';
         break;
-      case PermissionException:
+      case PermissionException _:
         userMessage = 'Permission denied: ${exception.message}';
         actionText = 'Settings';
         break;
@@ -280,29 +280,29 @@ class ErrorHandler {
   static String getUserFriendlyMessage(dynamic error) {
     if (error is AppException) {
       switch (error.runtimeType) {
-        case NetworkException:
+        case NetworkException _:
           return 'Please check your internet connection and try again.';
-        case DataException:
+        case DataException _:
           return 'There was a problem with your data. Please try again.';
-        case CodeExecutionException:
+        case CodeExecutionException _:
           return 'There was an error running your code. Please check the syntax.';
-        case ValidationException:
+        case ValidationException _:
           return 'Please check your input and try again.';
-        case AuthenticationException:
+        case AuthenticationException _:
           return 'Please log in again to continue.';
-        case FileException:
+        case FileException _:
           return 'There was a problem with the file. Please try again.';
-        case StorageException:
+        case StorageException _:
           return 'There was a problem saving your data. Please try again.';
-        case LessonException:
+        case LessonException _:
           return 'There was a problem with the lesson. Please try again.';
-        case UserProfileException:
+        case UserProfileException _:
           return 'There was a problem with your profile. Please try again.';
-        case ConfigurationException:
+        case ConfigurationException _:
           return 'There was a configuration problem. Please check your settings.';
-        case TimeoutException:
+        case TimeoutException _:
           return 'The operation took too long. Please try again.';
-        case PermissionException:
+        case PermissionException _:
           return 'Please grant the required permissions to continue.';
         default:
           return 'An unexpected error occurred. Please try again.';
@@ -331,16 +331,16 @@ class ErrorHandler {
   static bool isRecoverable(dynamic error) {
     if (error is AppException) {
       switch (error.runtimeType) {
-        case NetworkException:
-        case DataException:
-        case TimeoutException:
-        case StorageException:
-        case LessonException:
-        case UserProfileException:
+        case NetworkException _:
+        case DataException _:
+        case TimeoutException _:
+        case StorageException _:
+        case LessonException _:
+        case UserProfileException _:
           return true;
-        case ValidationException:
-        case ConfigurationException:
-        case PermissionException:
+        case ValidationException _:
+        case ConfigurationException _:
+        case PermissionException _:
           return false;
         default:
           return true;

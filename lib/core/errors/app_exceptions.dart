@@ -151,3 +151,30 @@ class PermissionException extends AppException {
   @override
   String toString() => 'PermissionException: $message';
 }
+
+/// Exception thrown when cache operations fail
+class CacheException extends AppException {
+  final dynamic originalException;
+  
+  const CacheException({
+    required super.message,
+    super.code,
+    super.details,
+    this.originalException,
+  });
+
+  @override
+  String toString() => 'CacheException: $message${originalException != null ? ' (Original: $originalException)' : ''}';
+}
+
+/// Exception thrown when student/user operations fail
+class StudentException extends AppException {
+  const StudentException({
+    required super.message,
+    super.code,
+    super.details,
+  });
+
+  @override
+  String toString() => 'StudentException: $message';
+}
