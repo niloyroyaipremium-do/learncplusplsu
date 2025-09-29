@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import '../providers/app_provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/progress_export_service.dart';
@@ -236,31 +237,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Choose Theme'),
-        content: RadioGroup<ThemeMode>(
-          groupValue: appProvider.themeMode,
-          onChanged: (ThemeMode? value) {
-            if (value != null) {
-              appProvider.setThemeMode(value);
-              Navigator.pop(context);
-            }
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile<ThemeMode>(
-                title: const Text('Light'),
-                value: ThemeMode.light,
-              ),
-              RadioListTile<ThemeMode>(
-                title: const Text('Dark'),
-                value: ThemeMode.dark,
-              ),
-              RadioListTile<ThemeMode>(
-                title: const Text('System'),
-                value: ThemeMode.system,
-              ),
-            ],
-          ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<ThemeMode>(
+              title: const Text('Light'),
+              value: ThemeMode.light,
+              groupValue: appProvider.themeMode,
+              onChanged: (ThemeMode? value) {
+                if (value != null) {
+                  appProvider.setThemeMode(value);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('Dark'),
+              value: ThemeMode.dark,
+              groupValue: appProvider.themeMode,
+              onChanged: (ThemeMode? value) {
+                if (value != null) {
+                  appProvider.setThemeMode(value);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('System'),
+              value: ThemeMode.system,
+              groupValue: appProvider.themeMode,
+              onChanged: (ThemeMode? value) {
+                if (value != null) {
+                  appProvider.setThemeMode(value);
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -406,27 +419,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final Uri url = Uri.parse(
       'https://play.google.com/store/apps/details?id=com.example.niloylearncplusplus',
     );
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
+    
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not launch Play Store'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          const SnackBar(content: Text('Could not launch Play Store')),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error launching Play Store: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
   }
 
   void _shareApp(BuildContext context) async {
-    final Uri url = Uri.parse(
-      'https://play.google.com/store/apps/details?id=com.example.niloylearncplusplus',
-    );
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
+    const String appUrl = 'https://play.google.com/store/apps/details?id=com.example.niloylearncplusplus';
+    const String shareText = 'Check out Learn C++ - A comprehensive C++ learning app! 🚀\n\nDownload it here: $appUrl';
+    
+    try {
+      await Share.share(shareText);
+    } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          const SnackBar(content: Text('Could not launch Play Store')),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not share app: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -459,12 +490,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       query: 'subject=Learn C++ Feedback',
     );
 
-    if (await canLaunchUrl(emailLaunchUri)) {
-      await launchUrl(emailLaunchUri);
-    } else {
+    try {
+      if (await canLaunchUrl(emailLaunchUri)) {
+        await launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not launch email client'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          const SnackBar(content: Text('Could not launch email client')),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error launching email client: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -474,12 +519,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final Uri url = Uri.parse(
       'https://github.com/your_username/niloylearncplusplus',
     );
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
+    
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not launch GitHub'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          const SnackBar(content: Text('Could not launch GitHub')),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error launching GitHub: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
