@@ -1,6 +1,7 @@
 import 'package:timezone/data/latest.dart' as tz;
 import 'notification_service.dart';
 import 'error_service.dart';
+import 'background_service.dart';
 import '../utils/logger.dart';
 
 class AppInitializationService {
@@ -25,6 +26,11 @@ class AppInitializationService {
       final notificationService = NotificationService();
       await notificationService.requestPermissions();
       await notificationService.initialize();
+
+      // Initialize background service
+      final backgroundService = BackgroundService();
+      await backgroundService.initialize();
+      await backgroundService.start();
 
       _isInitialized = true;
       Logger.info('App initialization completed successfully');

@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../providers/app_provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/progress_export_service.dart';
+import '../widgets/background_mode_settings.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -67,6 +68,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
+
+              const SizedBox(height: 24),
+
+              // Background Mode Section
+              const BackgroundModeSettings(),
 
               const SizedBox(height: 24),
 

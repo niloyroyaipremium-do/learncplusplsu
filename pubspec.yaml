@@ -72,6 +72,10 @@ dependencies:
   connectivity_plus: ^6.0.5
   package_info_plus: ^8.0.2
   timezone: ^0.9.4
+  
+  # Background processing
+  workmanager: ^0.5.2
+  flutter_background_service: ^5.0.5
 
 dev_dependencies:
   flutter_test:
